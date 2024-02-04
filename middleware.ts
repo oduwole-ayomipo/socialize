@@ -6,11 +6,12 @@ export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   if (!currentUser && path !== "/login" && path !== "/register") {
+    // User is not logged in, and trying to access a page other than login or register
     return NextResponse.redirect(new URL("/login", request.url));
-  } else if (currentUser && (path === "/login" || path === "/register")) {
-    return NextResponse.redirect(new URL("/", request.url));
+  } else if (currentUser) {
+    // User is logged in, allow access to all pages
+    return NextResponse.next();
   }
-  return NextResponse.next();
 }
 
 export const config = {

@@ -6,7 +6,7 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
-import { useAuthContext } from "../context/AuthContext";
+import { useAuthContext } from "../../context/AuthContext";
 import { auth } from "../../../firebase.config";
 import { useRouter } from "next/navigation";
 import { registerSchema } from "@/schema";

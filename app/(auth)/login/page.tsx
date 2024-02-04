@@ -1,10 +1,21 @@
 import React from "react";
 import Link from "next/link";
 import { LoginForm } from "../login/login-form";
+import { Toaster } from "react-hot-toast";
 
 const page = () => {
   return (
     <>
+      <Toaster
+        position="bottom-right"
+        reverseOrder={false}
+        toastOptions={{
+          style: {
+            background: "#161B22",
+            color: "#FFFAFF",
+          },
+        }}
+      />
       <>
         <div className="w-full">
           <h1 className="text-sm text-center font-semibold ml-2">
