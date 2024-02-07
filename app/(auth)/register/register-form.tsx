@@ -11,7 +11,14 @@ import { auth, db } from "../../../firebase.config";
 import { useRouter } from "next/navigation";
 import { registerSchema } from "@/schema";
 import toast from "react-hot-toast";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
 import { ClipLoader } from "react-spinners";
 
 interface RegisterValues {
@@ -35,8 +42,7 @@ export const RegisterForm: React.FC = () => {
 
   const handleSubmit = async (values: RegisterValues) => {
     try {
-      // TODO: Check if username exists in firebase db, if it does, RETURN an error
-
+      //Check if username exists in firebase db, if it does, RETURN an error
       const q = query(
         collection(db, "userProfile"),
         where("username", "==", values.username)
@@ -49,7 +55,6 @@ export const RegisterForm: React.FC = () => {
       }
 
       // If username does not occur, proceed to account creation
-
       setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -70,6 +75,14 @@ export const RegisterForm: React.FC = () => {
 
       //set a timer delay
       await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // set user profile data to firestore db
+      await setDoc(doc(db, "userProfile", user.uid), {
+        email: values.email,
+        fullname: values.fullname,
+        username: values.username,
+        bio: " ",
+      });
 
       //Navigate to home page
       router.push("/");
