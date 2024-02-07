@@ -7,10 +7,12 @@ import {
   sendEmailVerification,
 } from "firebase/auth";
 import { useAuthContext } from "../../context/AuthContext";
-import { auth } from "../../../firebase.config";
+import { auth, db } from "../../../firebase.config";
 import { useRouter } from "next/navigation";
 import { registerSchema } from "@/schema";
 import toast from "react-hot-toast";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { ClipLoader } from "react-spinners";
 
 interface RegisterValues {
   fullname: string;
@@ -20,9 +22,10 @@ interface RegisterValues {
 }
 
 export const RegisterForm: React.FC = () => {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { dispatch } = useAuthContext();
+  const router = useRouter();
+
   const initialValues: RegisterValues = {
     fullname: "",
     username: "",
@@ -32,6 +35,21 @@ export const RegisterForm: React.FC = () => {
 
   const handleSubmit = async (values: RegisterValues) => {
     try {
+      // TODO: Check if username exists in firebase db, if it does, RETURN an error
+
+      const q = query(
+        collection(db, "userProfile"),
+        where("username", "==", values.username)
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.docs.length > 0) {
+        return toast.error("Oops! Username already exists");
+      }
+
+      // If username does not occur, proceed to account creation
+
       setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -39,21 +57,21 @@ export const RegisterForm: React.FC = () => {
         values.password
       );
 
-      // TODO: Check if username exists in firebase db, if it does, RETURN an error
-
       //user signed up
       const user = userCredential.user;
 
       // send verified email
-      sendEmailVerification(user);
+      await sendEmailVerification(user);
 
+      // dispatch the registered state
       dispatch({ type: "REGISTER", payload: user });
 
       toast.success("Success! Email Verification link sent!");
 
-      // A delay of at least 3 seconds using a promise and setTimeout
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      //set a timer delay
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
+      //Navigate to home page
       router.push("/");
     } catch (error: any) {
       toast.error(error.code);
@@ -158,11 +176,21 @@ export const RegisterForm: React.FC = () => {
               <button
                 disabled={loading}
                 type="submit"
-                className={`bg-secondary-green w-full py-2 rounded font-semibold hover:opacity-70 ${
-                  loading ? "cursor-not-allowed opacity-70" : "cursor-pointer"
+                className={`w-full bg-secondary-green py-2 rounded font-semibold hover:opacity-70 ${
+                  loading ? "cursor-not-allowed opacity-40" : "cursor-pointer"
                 }`}
               >
-                Sign up
+                <>
+                  <ClipLoader
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                    color="#36d7b7"
+                    loading={loading}
+                    cssOverride={{ margin: "0px 0.5rem -4px 0" }}
+                    size={20}
+                  />
+                  {" Sign Up"}
+                </>
               </button>
             </div>
           </div>

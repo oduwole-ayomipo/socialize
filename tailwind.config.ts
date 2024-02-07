@@ -23,6 +23,7 @@ const config: Config = {
       stroke: "#E2E8F0",
       "secondary-red": "#D83158",
       "secondary-green": "#2C666E",
+      "secondary-black": "#161B22",
       "accent-green": "#07393C",
       ...defaultTheme.colors,
     },

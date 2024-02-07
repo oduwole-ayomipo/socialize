@@ -8,6 +8,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebase.config";
 import toast from "react-hot-toast";
 import { loginSchema } from "@/schema";
+import { ClipLoader } from "react-spinners";
 
 interface LoginValues {
   email: string;
@@ -41,7 +42,7 @@ export const LoginForm = () => {
       toast.success("Success! Redirecting");
 
       // A delay of at least 3 seconds using a promise and setTimeout
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       router.push("/");
     } catch (error: any) {
@@ -105,11 +106,21 @@ export const LoginForm = () => {
             <button
               disabled={loading}
               type="submit"
-              className={`bg-secondary-green w-full py-2 rounded font-semibold hover:opacity-70 ${
-                loading ? "cursor-not-allowed opacity-70" : "cursor-pointer"
+              className={`w-full bg-secondary-green py-2 rounded font-semibold hover:opacity-70 ${
+                loading ? "cursor-not-allowed opacity-40" : "cursor-pointer"
               }`}
             >
-              Login
+              <>
+                <ClipLoader
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                  color="#36d7b7"
+                  loading={loading}
+                  cssOverride={{ margin: "0px 0.5rem -4px 0" }}
+                  size={20}
+                />
+                {" Log In"}
+              </>
             </button>
           </div>
         </Form>
