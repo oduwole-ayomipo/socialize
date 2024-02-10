@@ -61,7 +61,7 @@ export const LoginForm = () => {
       >
         <Form className="w-full space-y-4 p-4 bg-[#161B22]">
           <div>
-            <label className="mb-2.5 block font-display text-left font-semibold">
+            <label className="mb-2.5 block font-display text-left font-medium">
               Email
             </label>
             <Field
@@ -82,7 +82,7 @@ export const LoginForm = () => {
           </div>
 
           <div>
-            <label className="mb-2.5 block font-display text-left font-semibold">
+            <label className="mb-2.5 block font-display text-left font-medium">
               Password
             </label>
             <Field

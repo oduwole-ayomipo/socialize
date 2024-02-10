@@ -123,7 +123,7 @@ export const RegisterForm: React.FC = () => {
             </div>
 
             <div>
-              <label className="mb-2.5 block font-display text-left font-semibold">
+              <label className="mb-2.5 block font-display text-left font-medium">
                 Username
               </label>
               <Field
@@ -144,7 +144,7 @@ export const RegisterForm: React.FC = () => {
             </div>
 
             <div>
-              <label className="mb-2.5 block font-display text-left font-semibold">
+              <label className="mb-2.5 block font-display text-left font-medium">
                 Email
               </label>
               <Field
@@ -165,7 +165,7 @@ export const RegisterForm: React.FC = () => {
             </div>
 
             <div>
-              <label className="mb-2.5 block font-display text-left font-semibold">
+              <label className="mb-2.5 block font-display text-left font-medium">
                 Password
               </label>
               <Field
@@ -189,8 +189,10 @@ export const RegisterForm: React.FC = () => {
               <button
                 disabled={loading}
                 type="submit"
-                className={`w-full bg-secondary-green py-2 rounded font-semibold hover:opacity-70 ${
-                  loading ? "cursor-not-allowed opacity-40" : "cursor-pointer"
+                className={`w-full bg-secondary-green py-2 rounded font-semibold  ${
+                  loading
+                    ? "cursor-not-allowed opacity-40"
+                    : "cursor-pointer hover:opacity-70"
                 }`}
               >
                 <>
