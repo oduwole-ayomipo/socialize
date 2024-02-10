@@ -7,9 +7,9 @@ import {
   sendEmailVerification,
 } from "firebase/auth";
 import { useAuthContext } from "../../context/AuthContext";
-import { auth, db } from "../../../firebase.config";
+import { auth, db } from "@/firebase.config";
 import { useRouter } from "next/navigation";
-import { registerSchema } from "@/schema";
+import { registerSchema } from "@/src/app/schema";
 import toast from "react-hot-toast";
 import {
   collection,

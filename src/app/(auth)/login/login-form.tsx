@@ -7,7 +7,7 @@ import { useAuthContext } from "../../context/AuthContext";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebase.config";
 import toast from "react-hot-toast";
-import { loginSchema } from "@/schema";
+import { loginSchema } from "@/src/app/schema";
 import { ClipLoader } from "react-spinners";
 
 interface LoginValues {
