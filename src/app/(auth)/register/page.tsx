@@ -2,6 +2,10 @@ import React from "react";
 import { RegisterForm } from "../register/register-form";
 import Link from "next/link";
 import { Toaster } from "react-hot-toast";
+import { CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Cormorant_Unicase } from "next/font/google";
+
+const cormorant = Cormorant_Unicase({ weight: ["700"], subsets: ["latin"] });
 
 const page = () => {
   return (
@@ -16,21 +20,26 @@ const page = () => {
           },
         }}
       />
-      <div className="w-full">
-        <h1 className="text-sm text-center font-semibold ml-2">
-          Create an account with
-          <span className="font-accent text-xl"> socialize</span>
-        </h1>
-      </div>
-
-      <RegisterForm />
-      <div>
-        <Link href="/login">
-          <span className="text-secondary-green font-semibold">
-            already have an account? login
-          </span>
-        </Link>
-      </div>
+      <>
+        <CardHeader className="pt-2">
+          <h1 className={`text-3xl text-center ${cormorant.className}`}>
+            socialize
+          </h1>
+          <h3 className="text-center text-sm md:text-base">
+            create an account and stay connected!
+          </h3>
+        </CardHeader>
+        <CardContent className="w-full">
+          <RegisterForm />
+        </CardContent>
+        <CardFooter>
+          <Link href="/login">
+            <span className="text-sm text-accent-green font-semibold p-1 hover:font-bold">
+              already have an account? login{" "}
+            </span>
+          </Link>
+        </CardFooter>
+      </>
     </>
   );
 };

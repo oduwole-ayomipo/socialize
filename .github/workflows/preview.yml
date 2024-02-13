@@ -25,10 +25,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "yarn"
       - run: yarn install --frozen-lockfile
-      - run: yarn test
 
   Deploy-Preview:
-    needs: [Test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

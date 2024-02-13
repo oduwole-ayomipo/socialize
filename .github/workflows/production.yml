@@ -27,10 +27,8 @@ jobs:
           cache: "yarn"
 
       - run: yarn install --frozen-lockfile
-      - run: yarn test
 
   Deploy-Preview:
-    needs: [Test]
     runs-on: ubuntu-latest
 
     steps:

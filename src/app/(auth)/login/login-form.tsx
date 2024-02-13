@@ -9,16 +9,25 @@ import toast from "react-hot-toast";
 import { loginSchema, TLoginSchema } from "@/src/app/schema";
 import { ClipLoader } from "react-spinners";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 export const LoginForm = () => {
   const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<TLoginSchema>({
+  const form = useForm<TLoginSchema>({
     resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
   const [loading, setLoading] = useState(false);
   const { dispatch } = useAuthContext();
@@ -44,8 +53,6 @@ export const LoginForm = () => {
 
       setLoading(false);
 
-      reset();
-
       router.push("/");
     } catch (error: any) {
       toast.error(error.code);
@@ -54,73 +61,71 @@ export const LoginForm = () => {
   };
 
   return (
-    <>
+    <Form {...form}>
       <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="w-full space-y-4 p-4 bg-[#161B22]"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-4 p-4 bg-accent-black"
       >
-        <div>
-          <label className="mb-2.5 block font-display text-left font-medium">
-            Email
-          </label>
-          <input
-            {...register("email")}
-            className={`w-full rounded border ${
-              loading ? "cursor-not-allowed:" : "cursor-pointer"
-            } border-secondary-green/40 bg-primary-black py-2 px-3 shadow-1 focus:border-secondary-green focus:outline-none focus-visible:shadow-none`}
-            disabled={loading}
-            placeholder="example@mail.com"
-            type="email"
-            id="email"
-          />
-
-          {errors.email && (
-            <p className="mb-2.5 block font-display text-left font-normal my-[2px] text-xs text-secondary-red">{`${errors.email.message}`}</p>
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="example@mail.com"
+                  {...field}
+                  disabled={loading}
+                  className={loading ? "cursor-not-allowed:" : "cursor-pointer"}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
-        </div>
+        />
 
-        <div>
-          <label className="mb-2.5 block font-display text-left font-medium">
-            Password
-          </label>
-          <input
-            {...register("password")}
-            disabled={loading}
-            className={`w-full rounded border ${
-              loading ? "cursor-not-allowed:" : "cursor-pointer"
-            } border-secondary-green/40 bg-primary-black py-2 px-3 shadow-1 focus:border-secondary-green focus:outline-none focus-visible:shadow-none`}
-            placeholder="*****"
-            type="password"
-            name="password"
-            id="password"
-          />
-          {errors.password && (
-            <p className="mb-2.5 block font-display text-left font-normal my-[2px] text-xs text-secondary-red">{`${errors.password.message}`}</p>
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="*****"
+                  {...field}
+                  disabled={loading}
+                  className={loading ? "cursor-not-allowed:" : "cursor-pointer"}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
-        </div>
+        />
 
         <div>
-          <button
-            disabled={loading}
+          <Button
             type="submit"
-            className={`w-full bg-secondary-green py-2 rounded font-semibold hover:opacity-70 ${
-              loading ? "cursor-not-allowed opacity-40" : "cursor-pointer"
+            disabled={loading}
+            className={` ${
+              loading
+                ? "cursor-not-allowed opacity-40 hover:opacity-70"
+                : "cursor-pointer"
             }`}
           >
-            <>
-              <ClipLoader
-                aria-label="Loading Spinner"
-                data-testid="loader"
-                color="#36d7b7"
-                loading={loading}
-                cssOverride={{ margin: "0px 0.5rem -4px 0" }}
-                size={20}
-              />
-              {" Log In"}
-            </>
-          </button>
+            <ClipLoader
+              aria-label="Loading Spinner"
+              data-testid="loader"
+              color="#36d7b7"
+              loading={loading}
+              cssOverride={{ margin: "0px 0.5rem -4px 0" }}
+              size={20}
+            />
+            Login
+          </Button>
         </div>
       </form>
-    </>
+    </Form>
   );
 };

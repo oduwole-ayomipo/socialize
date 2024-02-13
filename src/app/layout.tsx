@@ -3,7 +3,7 @@ import { Nunito_Sans } from "next/font/google";
 import "./globals.css";
 import { AuthContextProvider } from "./context/AuthContext";
 
-const nun = Nunito_Sans({ subsets: ["latin"] });
+const nunito = Nunito_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Socialize",
@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={nun.className}>
+      <body className={nunito.className}>
         <AuthContextProvider>{children}</AuthContextProvider>
       </body>
     </html>

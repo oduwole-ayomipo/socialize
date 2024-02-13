@@ -4,7 +4,9 @@ import { db } from "@/firebase.config";
 import { doc, getDoc } from "firebase/firestore";
 import { useAuthContext } from "../context/AuthContext";
 import toast from "react-hot-toast";
+import { Cormorant_Unicase } from "next/font/google";
 
+const cormorant = Cormorant_Unicase({ weight: ["700"], subsets: ["latin"] });
 const Header = () => {
   const { currentUser } = useAuthContext();
   const [displayName, setDisplayName] = useState("");
@@ -33,7 +35,10 @@ const Header = () => {
     <>
       <main className="w-full flex items-center justify-between p-9 gap-6">
         <div className="">
-          <h1 id="logo" className="font-accent text-3xl font-black">
+          <h1
+            id="logo"
+            className={`text-3xl font-black ${cormorant.className}`}
+          >
             socialize
           </h1>
         </div>

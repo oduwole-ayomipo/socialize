@@ -6,7 +6,7 @@ const password = z.string().min(6, "Password must be at least 6 Characters");
 
 const fullname = z.string().min(6, "Full name must be at least 6 Characters");
 
-const username = z.string().min(2, "Username nust at least 2 Characters");
+const username = z.string().min(2, "Username must be at least 2 Characters");
 
 // validation schemas
 export const loginSchema = z.object({
