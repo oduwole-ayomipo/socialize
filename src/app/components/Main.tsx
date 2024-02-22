@@ -158,6 +158,7 @@ const Main = ({ className, ...props }: CardProps) => {
     <div className="w-full md:w-3/4 md:max-w-3/4">
       {notifications.map((notification, index) => (
         <Card
+          key={index}
           className={cn(
             "w-full mb-3 md:mb-6 bg-accent-black border-0",
             className
@@ -167,10 +168,7 @@ const Main = ({ className, ...props }: CardProps) => {
           <CardHeader>
             <CardTitle>
               <div className="flex items-center justify-between">
-                <div
-                  key={index}
-                  className="mb-2 grid self-center grid-cols-[2rem_1fr] gap-3 p-2 cursor-pointer last:mb-0 last:pb-0"
-                >
+                <div className="mb-2 grid self-center grid-cols-[2rem_1fr] gap-3 p-2 cursor-pointer last:mb-0 last:pb-0">
                   <div className="w-8 h-8 bg-accent-black rounded-full flex items-center">
                     <Image src={notification.img} alt="avatar" />
                   </div>
