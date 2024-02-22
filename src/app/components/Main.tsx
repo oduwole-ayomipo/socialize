@@ -40,6 +40,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import Image from "next/image";
 
 const notifications = [
   {
@@ -171,7 +172,7 @@ const Main = ({ className, ...props }: CardProps) => {
                   className="mb-2 grid self-center grid-cols-[2rem_1fr] gap-3 p-2 cursor-pointer last:mb-0 last:pb-0"
                 >
                   <div className="w-8 h-8 bg-accent-black rounded-full flex items-center">
-                    <img src={notification.img} />
+                    <Image src={notification.img} alt="avatar" />
                   </div>
                   <div className="space-y-1">
                     <div className="flex items-center h-full justify-between">

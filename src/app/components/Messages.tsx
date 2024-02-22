@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { MenubarSeparator } from "@/components/ui/menubar";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import Image from "next/image";
 
 const notifications = [
   {
@@ -106,7 +107,7 @@ const Messages = ({ className, ...props }: CardProps) => {
               className="mb-4 grid self-center grid-cols-[3rem_1fr] gap-4 py-3 px-2 cursor-pointer last:mb-0 last:pb-0 hover:bg-accent"
             >
               <div className="w-12 h-12 bg-accent-black rounded-full flex items-center">
-                <img src={notification.img} />
+                <Image src={notification.img} alt="avatar" />
               </div>
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
