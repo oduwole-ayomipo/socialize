@@ -1,8 +1,6 @@
-import Header from "./components/Header";
-import Main from "./components/Main";
-import Messages from "./components/Messages";
-import Notification from "./components/Notification";
-import Sidebar from "./components/Sidebar";
+import Main from "../../components/Main";
+import Messages from "../../components/Messages";
+import Notification from "../../components/Notification";
 
 export default function Home() {
   return (

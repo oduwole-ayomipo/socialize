@@ -107,7 +107,7 @@ const Messages = ({ className, ...props }: CardProps) => {
               className="mb-4 grid self-center grid-cols-[3rem_1fr] gap-4 py-3 px-2 cursor-pointer last:mb-0 last:pb-0 hover:bg-accent"
             >
               <div className="w-12 h-12 bg-accent-black rounded-full flex items-center">
-                <Image src={notification.img} alt="avatar" />
+                <img src={notification.img} alt="avatar" />
               </div>
               <div className="space-y-1">
                 <div className="flex items-center justify-between">

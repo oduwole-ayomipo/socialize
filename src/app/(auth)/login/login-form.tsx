@@ -94,6 +94,7 @@ export const LoginForm = () => {
               <FormControl>
                 <Input
                   placeholder="*****"
+                  type="password"
                   {...field}
                   disabled={loading}
                   className={loading ? "cursor-not-allowed:" : "cursor-pointer"}

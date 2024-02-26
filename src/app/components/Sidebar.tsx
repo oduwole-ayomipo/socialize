@@ -21,7 +21,7 @@ import Link from "next/link";
 const Sidebar = () => {
   return (
     <>
-      <nav className="fixed px-2 flex py-3 w-11/12 max-w-6xl shadow-lg bg-accent-black opacity-90 z-50 bottom-6">
+      <nav className="fixed px-2 flex py-3 w-11/12 max-w-8xl shadow-lg bg-accent-black opacity-90 z-50 bottom-6">
         <Menubar className="border-0 w-full flex justify-around items-center bg-transparent">
           <MenubarMenu>
             <MenubarTrigger className="focus:bg-transparent focus:opacity-60 hover:opacity-60">

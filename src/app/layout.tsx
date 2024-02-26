@@ -19,16 +19,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${nunito.className} w-full max-w-6xl mx-auto `}>
-        <div className="relative scroll-smooth scroll-m-0">
-          <Header />
-          {/* childer start */}
-          <AuthContextProvider>{children}</AuthContextProvider>
-          {/* childer end */}
-          <div className="flex items-center w-full justify-center">
-            <Sidebar />
-          </div>
-        </div>
+      <body className={`${nunito.className}`}>
+        <AuthContextProvider>{children}</AuthContextProvider>
       </body>
     </html>
   );
