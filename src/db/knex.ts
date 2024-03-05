@@ -9,51 +9,33 @@ export const database = configureKnex({
 declare module "knex/types/tables" {
   interface User {
     id: number;
-    registered_at: Date;
-    last_login_at: Date;
     username: string;
     email: string;
     password: string;
     profile_image: Buffer | null;
     bio: string | null;
+    registered_at: Date;
+    last_login_at: Date;
   }
 
-  interface Tables {
-    users: User;
-  }
-}
-
-declare module "knex/types/tables" {
   interface Comment {
     id: number;
     created_at: Date;
     post_id: number;
-    user_id: number;
+    author_id: number;
     comment_text: string;
-    status: boolean; //  edited === true or unedited === false
+    isEdited: boolean; //  edited === true or unedited === false
     likes_count: number | null;
   }
 
-  interface Tables {
-    comments: Comment;
-  }
-}
-
-declare module "knex/types/tables" {
   interface Notification {
     id: number;
     created_at: Date;
     notification_text: string;
-    user_id: number;
-    status: boolean; // read === true or unread === false
+    sender_id: number | null;
+    isRead: boolean; // read === true or unread === false
   }
 
-  interface Tables {
-    notifications: Notification;
-  }
-}
-
-declare module "knex/types/tables" {
   interface Post {
     id: number;
     created_at: Date;
@@ -66,7 +48,18 @@ declare module "knex/types/tables" {
     shares_count: number | null;
   }
 
+  interface Likes {
+    id: number;
+    created_at: Date;
+    post_id: number;
+    liked_by: number;
+  }
+
   interface Tables {
+    notifications: Notification;
     posts: Post;
+    comments: Comment;
+    users: User;
+    likes: Likes;
   }
 }

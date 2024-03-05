@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { database } from "@/src/db/knex";
 
-// Mock read
+// Read
 export async function GET(req: NextResponse) {
   try {
-    const { post_id } = await req.json();
+    const user_id = req.nextUrl.searchParams.get("user_id");
 
-    if (!post_id) {
+    if (!user_id) {
       return NextResponse.json(
-        { message: "User ID is required" },
+        { message: "user is required" },
         { status: 400 }
       );
     }
@@ -16,9 +16,7 @@ export async function GET(req: NextResponse) {
     const post = await database
       .select("*")
       .from("Post")
-      .where({ post_id: post_id });
-
-    console.log({ post });
+      .where({ user_id: user_id });
 
     return NextResponse.json({ posts: post }, { status: 200 });
   } catch (error) {
@@ -30,7 +28,7 @@ export async function GET(req: NextResponse) {
   }
 }
 
-//Mock create
+// Create
 export async function POST(req: NextRequest) {
   try {
     const { user_id, post_content, post_media, post_title } = await req.json();
@@ -44,10 +42,13 @@ export async function POST(req: NextRequest) {
       })
       .returning("*");
 
+    await database("User").where({ id: user_id }).increment("post_count", 1);
+
     await database("Notification").insert({
-      user_id: user_id,
       notification_text: "post successfully uploaded",
+      sender_id: null,
       created_at: new Date(),
+      isRead: false,
     });
 
     return NextResponse.json({ post: newPost }, { status: 200 });
@@ -60,12 +61,12 @@ export async function POST(req: NextRequest) {
   }
 }
 
-//Mock update
+// Update
 export async function PATCH(req: NextRequest, res: NextResponse) {
   try {
     const { id, post_content, post_title } = await req.json();
 
-    const updatePost = await database("Comment")
+    const updatePost = await database("Post")
       .where({ id: id })
       .update({
         post_content: post_content,
@@ -85,7 +86,7 @@ export async function PATCH(req: NextRequest, res: NextResponse) {
   }
 }
 
-//Mock delete
+// Delete
 export async function DELETE(req: NextRequest, res: NextResponse) {
   try {
     const { id } = await req.json();
@@ -97,6 +98,8 @@ export async function DELETE(req: NextRequest, res: NextResponse) {
       );
     }
     const deletedCount = await database("Post").where("id", id).delete();
+
+    await database("User").where({ id: user_id }).increment("post_count", 1);
 
     if (deletedCount > 0) {
       return NextResponse.json(

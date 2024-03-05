@@ -1,19 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { database } from "@/src/db/knex";
 
-// Mock read
+//  Read
 export async function GET(req: NextRequest, res: NextResponse) {
   try {
-    const { user_id, post_id } = await req.json();
+    const post_id = req.nextUrl.searchParams.get("post_id");
 
-    if (!user_id && !post_id) {
+    if (!post_id) {
       return NextResponse.json({ message: "ID is required" }, { status: 400 });
     }
 
     const comment = await database
-      .select("comment_text", "created_at", "likes_count")
+      .count("comment_text", "created_at", "likes_count", "author_id")
       .from("Comment")
-      .where({ user_id: user_id, post_id: post_id });
+      .where({ post_id: post_id });
 
     console.log({ comment });
 
@@ -27,34 +27,31 @@ export async function GET(req: NextRequest, res: NextResponse) {
   }
 }
 
-// Mock create
+// Create
 export async function POST(req: NextRequest) {
   try {
-    const { id, post_id, user_id, comment_text } = await req.json();
+    const { post_id, author_id, comment_text } = await req.json();
 
-    console.log("Parsed request body:", { post_id, user_id, comment_text });
+    console.log("Parsed request body:", { post_id, author_id, comment_text });
 
+    // create new post
     const newComment = await database("Comment")
       .insert({
-        id: id,
         post_id: post_id,
-        user_id: user_id,
+        author_id: author_id,
         comment_text: comment_text,
         created_at: new Date(),
         likes_count: null,
-        status: false, // edited = true, not edited = false
+        isEdited: false,
       })
       .returning("*");
 
-    await database("Post")
-      .where({ user_id: user_id, id: post_id })
-      .increment("comments_count", 1);
-
+    // add a notification
     await database("Notification").insert({
-      user_id: user_id,
-      notification_text: "one new comment on your post",
+      sender_id: author_id,
+      notification_text: "*blah blah* commented on your post",
       created_at: new Date(),
-      status: false,
+      isRead: false,
     });
 
     return NextResponse.json({ comments: newComment }, { status: 200 });
@@ -67,7 +64,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// Mock update
+// Update
 export async function PATCH(req: NextRequest, res: NextResponse) {
   try {
     const { id, comment_text } = await req.json();
@@ -91,7 +88,7 @@ export async function PATCH(req: NextRequest, res: NextResponse) {
   }
 }
 
-// Mock delete
+// Delete
 export async function DELETE(req: NextRequest, res: NextResponse) {
   try {
     const { id } = await req.json();

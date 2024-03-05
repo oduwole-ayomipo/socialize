@@ -1,21 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { database } from "@/src/db/knex";
 
-//Mock read
+// Read
 export async function GET(req: NextRequest) {
   try {
-    const { id } = await req.json();
+    const id = req.nextUrl.searchParams.get("id");
 
     if (!id) {
-      return NextResponse.json(
-        { message: "Comment ID is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ message: "ID is required" }, { status: 400 });
     }
 
-    const user = await database.select("*").from("User").where(id);
-
-    console.log({ user });
+    const user = await database.select("*").from("User").where({ id: id });
 
     return NextResponse.json({ users: user }, { status: 200 });
   } catch (error) {
@@ -27,22 +22,24 @@ export async function GET(req: NextRequest) {
   }
 }
 
-//Mock create
+// Create
 export async function POST(req: NextRequest) {
   try {
-    const { username, email, passowrd, bio } = await req.json();
+    const { username, email, password, bio } = await req.json();
 
     const newUser = await database("User")
       .insert({
         registered_at: new Date(),
         last_login_at: new Date(),
         email: email,
-        passowrd: passowrd,
+        password: password,
         bio: bio,
-        profile_picture: null,
+        profile_image: null,
         username: username,
       })
       .returning("*");
+
+    return NextResponse.json({ users: newUser }, { status: 200 });
   } catch (error) {
     console.error("Error fetching user: ", error);
     return NextResponse.json(
@@ -52,16 +49,16 @@ export async function POST(req: NextRequest) {
   }
 }
 
-//Mock update
+// Update
 export async function PATCH(req: NextRequest) {
   try {
-    const { id, username, bio, profile_picture } = await req.json();
+    const { id, username, bio, profile_image } = await req.json();
 
     const updateUser = await database("User")
       .where({ id: id })
       .update({
         bio: bio,
-        profile_picture: profile_picture,
+        profile_image: profile_image,
         username: username,
       })
       .returning("*");
