@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { database } from "@/src/db/knex";
 import { TBio, TEmail, TUserId, TUsername } from "../../schema";
 import { NextApiResponse } from "next";
+import { UserProfileSchema } from "../../schema";
 
 // Read
 export async function GET(req: NextRequest) {
@@ -29,17 +30,31 @@ export async function GET(req: NextRequest) {
 
 // Create a new user profile
 export async function POST(req: NextRequest, res: NextApiResponse) {
+  const PartialUserProfileSchema = UserProfileSchema.pick({
+    id: true,
+    username: true,
+    email: true,
+    email_verified: true,
+  });
+
   try {
     const { id, username, email, email_verified } = await req.json();
 
+    const reqData = PartialUserProfileSchema.parse({
+      id,
+      username,
+      email,
+      email_verified,
+    });
+
     const newUser = await database("UserProfile")
       .insert({
-        id: id,
-        email_verified: email_verified,
+        id: reqData.id,
+        email_verified: reqData.email_verified,
         created_at: new Date(),
         last_login_at: new Date(),
-        email: email,
-        username: username,
+        email: reqData.email,
+        username: reqData.username,
       })
       .returning("*");
 

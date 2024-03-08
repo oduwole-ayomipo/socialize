@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { TPostId, TAuthorId, TCommentText } from "@/src/app/schema";
 
 import { database } from "@/src/db/knex";
 
@@ -32,15 +31,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 // Create
 export async function POST(req: NextRequest) {
   try {
-    const {
-      post_id,
-      author_id,
-      comment_text,
-    }: {
-      post_id: TPostId;
-      author_id: TAuthorId;
-      comment_text: TCommentText;
-    } = await req.json();
+    const { post_id, author_id, comment_text } = await req.json();
 
     console.log("Parsed request body:", { post_id, author_id, comment_text });
 
@@ -73,13 +64,7 @@ export async function POST(req: NextRequest) {
 // Update
 export async function PATCH(req: NextRequest, res: NextResponse) {
   try {
-    const {
-      id,
-      comment_text,
-    }: {
-      id: TPostId;
-      comment_text: TCommentText;
-    } = await req.json();
+    const { id, comment_text } = await req.json();
 
     const updateComment = await database("Comment")
       .where({ id: id })
@@ -103,7 +88,7 @@ export async function PATCH(req: NextRequest, res: NextResponse) {
 // Delete
 export async function DELETE(req: NextRequest, res: NextResponse) {
   try {
-    const id: TCommentText = await req.json();
+    const id = await req.json();
 
     if (!id) {
       return NextResponse.json(

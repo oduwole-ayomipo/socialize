@@ -1,12 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { database } from "@/src/db/knex";
-import {
-  TPostContent,
-  TPostId,
-  TPostMedia,
-  TPostTitle,
-  TUserId,
-} from "@/src/app/schema";
 
 // Read
 export async function GET(req: NextResponse) {
@@ -38,17 +31,7 @@ export async function GET(req: NextResponse) {
 // Create
 export async function POST(req: NextRequest) {
   try {
-    const {
-      user_id,
-      post_content,
-      post_media,
-      post_title,
-    }: {
-      user_id: TUserId;
-      post_content: TPostContent;
-      post_media: TPostMedia;
-      post_title: TPostTitle;
-    } = await req.json();
+    const { user_id, post_content, post_media, post_title } = await req.json();
 
     const newPost = await database("Post")
       .insert({
@@ -81,15 +64,7 @@ export async function POST(req: NextRequest) {
 // Update
 export async function PATCH(req: NextRequest, res: NextResponse) {
   try {
-    const {
-      id,
-      post_content,
-      post_title,
-    }: {
-      id: TPostId;
-      post_content: TPostContent;
-      post_title: TPostTitle;
-    } = await req.json();
+    const { id, post_content, post_title } = await req.json();
 
     const updatePost = await database("Post")
       .where({ id: id })
@@ -114,7 +89,7 @@ export async function PATCH(req: NextRequest, res: NextResponse) {
 // Delete
 export async function DELETE(req: NextRequest, res: NextResponse) {
   try {
-    const id: TPostId = await req.json();
+    const id = await req.json();
 
     if (!id) {
       return NextResponse.json(
