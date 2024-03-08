@@ -1,5 +1,6 @@
 import { database } from "@/src/db/knex";
 import { NextRequest, NextResponse } from "next/server";
+import { TLikedBy, TPostId } from "../../schema";
 
 // Check the number of likes on a post
 export async function GET(req: NextRequest) {
@@ -28,8 +29,8 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const liked_by = req.nextUrl.searchParams.get("liked_by");
-    const post_id = await req.json();
+    const liked_by: TLikedBy | null = req.nextUrl.searchParams.get("liked_by");
+    const post_id: TPostId = await req.json();
 
     const likes = await database("Likes")
       .insert({
@@ -51,7 +52,7 @@ export async function POST(req: NextRequest) {
 // Mock delete
 export async function DELETE(req: NextRequest, res: NextResponse) {
   try {
-    const { id } = await req.json();
+    const id: number = await req.json();
 
     if (!id) {
       return NextResponse.json(

@@ -12,7 +12,10 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ message: "ID is required" }, { status: 400 });
     }
 
-    const user = await database.select("*").from("User").where({ id: id });
+    const user = await database
+      .select("*")
+      .from("UserProfile")
+      .where({ id: id });
 
     return NextResponse.json({ users: user }, { status: 200 });
   } catch (error) {
@@ -24,31 +27,23 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// Create
+// Create a new user profile
 export async function POST(req: NextRequest, res: NextApiResponse) {
   try {
-    const {
-      username,
-      email,
-      bio,
-    }: {
-      username: TUsername;
-      email: TEmail;
-      bio: TBio;
-    } = await req.json();
+    const { id, username, email, email_verified } = await req.json();
 
-    const newUser = await database("User")
+    const newUser = await database("UserProfile")
       .insert({
-        registered_at: new Date(),
+        id: id,
+        email_verified: email_verified,
+        created_at: new Date(),
         last_login_at: new Date(),
         email: email,
-        bio: bio,
-        profile_image: null,
         username: username,
       })
       .returning("*");
 
-    return res.status(200).json({ users: newUser });
+    return NextResponse.json({ userprofiles: newUser }, { status: 200 });
   } catch (error) {
     console.error("Error fetching user: ", error);
     return NextResponse.json(
@@ -73,7 +68,7 @@ export async function PATCH(req: NextRequest) {
       profile_image: BinaryType;
     } = await req.json();
 
-    const updateUser = await database("User")
+    const updateUser = await database("UserProfile")
       .where({ id: id })
       .update({
         bio: bio,
@@ -103,7 +98,7 @@ export async function DELETE(req: NextRequest, res: NextResponse) {
         { status: 400 }
       );
     }
-    const deletedCount = await database("User").where("id", id).delete();
+    const deletedCount = await database("UserProfile").where("id", id).delete();
 
     if (deletedCount > 0) {
       return NextResponse.json(

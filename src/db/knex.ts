@@ -18,6 +18,17 @@ declare module "knex/types/tables" {
     last_login_at: Date;
   }
 
+  interface UserProfile {
+    id: string;
+    created_at: Date;
+    username: string;
+    email: string;
+    email_verified: boolean;
+    profile_image: BinaryData | null;
+    bio: string | null;
+    last_login_at: Date;
+  }
+
   interface Comment {
     id: number;
     created_at: Date;
@@ -60,6 +71,7 @@ declare module "knex/types/tables" {
     posts: Post;
     comments: Comment;
     users: User;
+    userprofiles: UserProfile;
     likes: Likes;
   }
 }

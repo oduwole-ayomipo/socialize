@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
@@ -75,6 +76,25 @@ export const RegisterForm = () => {
       // send verified email
       await sendEmailVerification(user);
 
+      //set user profile to postgres db
+      if (user) {
+        try {
+          const res = await axios.post(
+            "http://localhost:3000/api/user-profile",
+            {
+              id: user.uid,
+              email_verified: user.emailVerified,
+              email: user.email,
+              username: data.username,
+            }
+          );
+
+          console.log(res.data);
+        } catch (error) {
+          console.error("error creating user", error);
+        }
+      }
+
       // dispatch the registered state
       dispatch({ type: "REGISTER", payload: user });
 
@@ -82,14 +102,6 @@ export const RegisterForm = () => {
 
       //set a timer delay
       await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // set user profile data to firestore db
-      await setDoc(doc(db, "userProfile", user.uid), {
-        email: data.email,
-        fullname: data.fullname,
-        username: data.username,
-        bio: " ",
-      });
 
       //Navigate to home page
       router.push("/");

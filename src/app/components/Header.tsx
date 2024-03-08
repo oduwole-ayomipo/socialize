@@ -9,31 +9,28 @@ import { Cormorant_Unicase } from "next/font/google";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import axios from "axios";
 
 const cormorant = Cormorant_Unicase({ weight: ["700"], subsets: ["latin"] });
 const Header = () => {
   const { currentUser } = useAuthContext();
-  const [displayName, setDisplayName] = useState("");
+  const [username, setUsername] = useState("");
 
+  // using axios to fetch the usernme
   useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const docRef = doc(db, "userProfile", currentUser.user.uid);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          const name = docSnap.data().username;
-          setDisplayName(name);
-        } else {
-          toast.error("Data not set");
-        }
-      } catch (err: any) {
-        toast.error(err.code);
+    const fetchData = async () => {
+      if (currentUser) {
+        const res = await axios.get("http://localhost:3000/api/user-profile", {
+          params: {
+            id: currentUser.uid,
+          },
+        });
+        setUsername(res.data.users[0].username);
       }
     };
 
-    fetchUserProfile();
-  }, [currentUser]);
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -56,9 +53,7 @@ const Header = () => {
             <AvatarFallback>RE</AvatarFallback>
           </Avatar>
 
-          <h3 className="ml-2 uppercase text-sm hidden md:block">
-            {displayName}
-          </h3>
+          <h3 className="ml-2 uppercase text-sm hidden md:block">{username}</h3>
         </div>
       </header>
     </>
