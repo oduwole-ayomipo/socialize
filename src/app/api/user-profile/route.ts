@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { database } from "@/src/db/knex";
-import { TBio, TEmail, TUserId, TUsername } from "../../schema";
 import { NextApiResponse } from "next";
 import { UserProfileSchema } from "../../schema";
 
 // Read
 export async function GET(req: NextRequest) {
+  console.log(req.headers);
+
   try {
     const id = req.nextUrl.searchParams.get("id");
 
@@ -71,17 +72,7 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
 // Update
 export async function PATCH(req: NextRequest) {
   try {
-    const {
-      id,
-      username,
-      bio,
-      profile_image,
-    }: {
-      id: TUserId;
-      username: TUsername;
-      bio: TBio;
-      profile_image: BinaryType;
-    } = await req.json();
+    const { id, username, bio, profile_image } = await req.json();
 
     const updateUser = await database("UserProfile")
       .where({ id: id })
@@ -105,7 +96,7 @@ export async function PATCH(req: NextRequest) {
 //Mock delete
 export async function DELETE(req: NextRequest, res: NextResponse) {
   try {
-    const id: TUserId = await req.json();
+    const id = await req.json();
 
     if (!id) {
       return NextResponse.json(

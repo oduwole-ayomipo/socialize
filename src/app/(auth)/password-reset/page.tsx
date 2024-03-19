@@ -1,9 +1,9 @@
 import React from "react";
-import { RegisterForm } from "../register/register-form";
 import Link from "next/link";
 import { Toaster } from "react-hot-toast";
-import { CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Cormorant_Unicase } from "next/font/google";
+import { CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { ResetForm } from "./reset-form";
 
 const cormorant = Cormorant_Unicase({ weight: ["700"], subsets: ["latin"] });
 
@@ -25,17 +25,18 @@ const page = () => {
           <h1 className={`text-3xl text-center ${cormorant.className}`}>
             socialize
           </h1>
-          <h3 className="text-center text-sm md:text-base">
-            create an account and stay connected!
-          </h3>
+          <span className="text-sm pt-2 text-center">
+            Forgot your password? Enter the email address and we will send a
+            link to reset your password.
+          </span>
         </CardHeader>
         <CardContent className="w-full">
-          <RegisterForm />
+          <ResetForm />
         </CardContent>
-        <CardFooter>
+        <CardFooter className="pb-2">
           <Link href="/login">
             <span className="text-sm text-accent-green p-1 hover:font-semibold">
-              already have an account? login
+              Back to Login
             </span>
           </Link>
         </CardFooter>

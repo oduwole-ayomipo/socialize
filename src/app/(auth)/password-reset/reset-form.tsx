@@ -2,11 +2,10 @@
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useAuthContext } from "../../context/AuthContext";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/firebase.config";
 import toast from "react-hot-toast";
-import { loginSchema, TLoginSchema } from "@/src/app/schema";
+import { passwordResetSchema, TPasswordResetSchema } from "@/src/app/schema";
 import { ClipLoader } from "react-spinners";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -19,42 +18,36 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import Link from "next/link";
 
-export const LoginForm = () => {
+export const ResetForm = () => {
   const router = useRouter();
-  const form = useForm<TLoginSchema>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<TPasswordResetSchema>({
+    resolver: zodResolver(passwordResetSchema),
     defaultValues: {
       email: "",
-      password: "",
     },
   });
   const [loading, setLoading] = useState(false);
-  const { dispatch } = useAuthContext();
 
-  const onSubmit = async (data: TLoginSchema) => {
+  const onSubmit = async (data: TPasswordResetSchema) => {
     try {
       setLoading(true);
 
-      // user logged in
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        data.email,
-        data.password
-      );
-      const user = userCredential;
-
-      dispatch({ type: "LOGIN", payload: user });
-
-      toast.success("Success! Redirecting");
+      sendPasswordResetEmail(auth, data.email)
+        .then(() => {
+          // Password reset email sent!
+          toast.success("Password reset email sent!");
+        })
+        .catch((error) => {
+          toast.error(error.message);
+        });
 
       // A delay of at least 3 seconds using a promise and setTimeout
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 6000));
 
       setLoading(false);
 
-      router.push("/");
+      router.push("/login");
     } catch (error: any) {
       toast.error(error.code);
       setLoading(false);
@@ -86,29 +79,6 @@ export const LoginForm = () => {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="*****"
-                  type="password"
-                  {...field}
-                  disabled={loading}
-                  className={loading ? "cursor-not-allowed:" : "cursor-pointer"}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="text-right text-xs mt-2 text-accent-green hover:">
-          <Link href="/password-reset">Forgot Password?</Link>
-        </div>
-
         <div>
           <Button
             type="submit"
@@ -127,7 +97,7 @@ export const LoginForm = () => {
               cssOverride={{ margin: "0px 0.5rem -4px 0" }}
               size={20}
             />
-            Login
+            Reset
           </Button>
         </div>
       </form>

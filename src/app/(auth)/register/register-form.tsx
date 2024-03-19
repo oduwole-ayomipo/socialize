@@ -184,6 +184,7 @@ export const RegisterForm = () => {
                 <Input
                   placeholder="*****"
                   {...field}
+                  type="password"
                   disabled={loading}
                   className={loading ? "cursor-not-allowed:" : "cursor-pointer"}
                 />

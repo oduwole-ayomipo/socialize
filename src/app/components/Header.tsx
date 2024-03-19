@@ -15,23 +15,40 @@ const cormorant = Cormorant_Unicase({ weight: ["700"], subsets: ["latin"] });
 const Header = () => {
   const { currentUser } = useAuthContext();
   const [username, setUsername] = useState("");
+  const [token, setToken] = useState("");
 
-  // using axios to fetch the usernme
+  useEffect(() => {
+    if (currentUser != null) {
+      setToken(currentUser.stsTokenManager.accessToken);
+    }
+  }, [currentUser]);
+
   useEffect(() => {
     const fetchData = async () => {
-      if (currentUser) {
-        const res = await axios.get("http://localhost:3000/api/user-profile", {
-          params: {
-            id: currentUser.uid,
-          },
-        });
-        setUsername(res.data.users[0].username);
+      if (currentUser && token) {
+        try {
+          const res = await axios.get(
+            "http://localhost:3000/api/user-profile",
+            {
+              headers: {
+                Authorization: "Bearer " + token,
+              },
+              params: {
+                id: currentUser.uid,
+              },
+            }
+          );
+          setUsername(res.data.users[0].username);
+        } catch (error) {
+          console.error("Error fetching user profile:", error);
+          // Handle error here, perhaps show a toast message
+          toast.error("Error fetching user profile");
+        }
       }
     };
 
     fetchData();
-  }, []);
-
+  }, [currentUser, token]);
   return (
     <>
       <header className="w-full sticky top-0 z-[9999] h-24 flex items-center p-4 pb-8 md:pt-7 md:p-8 justify-between gap-6">

@@ -28,6 +28,7 @@ yarn-error.log*
 # local env files
 .env*.local
 .env
+social-izee-firebase-adminsdk-rwrj9-55cf155181
 
 # vercel
 .vercel

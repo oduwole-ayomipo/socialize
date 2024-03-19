@@ -31,7 +31,7 @@ const page = () => {
         </CardContent>
         <CardFooter className="pb-2">
           <Link href="/register">
-            <span className="text-sm text-accent-green font-semibold p-1 hover:font-bold">
+            <span className="text-sm text-accent-green p-1 hover:font-semibold">
               new to socialize? create an account
             </span>
           </Link>

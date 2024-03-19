@@ -26,6 +26,9 @@ export const loginSchema = z.object({
   password,
 });
 
+export const passwordResetSchema = z.object({
+  email,
+});
 export const registerSchema = z.object({
   email,
   password,
@@ -35,4 +38,5 @@ export const registerSchema = z.object({
 
 // Forms
 export type TLoginSchema = z.infer<typeof loginSchema>;
+export type TPasswordResetSchema = z.infer<typeof passwordResetSchema>;
 export type TRegisterSchema = z.infer<typeof registerSchema>;

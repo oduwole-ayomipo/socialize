@@ -26,7 +26,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/middleware.ts"
+    "src/middleware.ts",
+    "firebaseAdmin.js"
   ],
   "exclude": ["node_modules"]
 }
