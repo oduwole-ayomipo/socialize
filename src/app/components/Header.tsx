@@ -1,8 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import { db } from "@/firebase.config";
-import { doc, getDoc } from "firebase/firestore";
 import { useAuthContext } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import { Cormorant_Unicase } from "next/font/google";
@@ -41,7 +39,6 @@ const Header = () => {
           setUsername(res.data.users[0].username);
         } catch (error) {
           console.error("Error fetching user profile:", error);
-          // Handle error here, perhaps show a toast message
           toast.error("Error fetching user profile");
         }
       }
@@ -64,14 +61,18 @@ const Header = () => {
           <MagnifyingGlassIcon className="h-5 w-5 opacity-45" />
           <Input placeholder="search..." className="focus-visible:ring-0" />
         </div>
-        <div className="flex items-center">
-          <Avatar className="h-8 w-8">
-            <AvatarImage src="https://avatar.iran.liara.run/public/55" />
-            <AvatarFallback>RE</AvatarFallback>
-          </Avatar>
+        <Link href="/user">
+          <div className="flex items-center">
+            <Avatar className="h-8 w-8">
+              <AvatarImage src="https://avatar.iran.liara.run/public/55" />
+              <AvatarFallback>RE</AvatarFallback>
+            </Avatar>
 
-          <h3 className="ml-2 uppercase text-sm hidden md:block">{username}</h3>
-        </div>
+            <h3 className="ml-2 lowercase font-semibold text-lg hidden md:block hover:border-b">
+              {username}
+            </h3>
+          </div>
+        </Link>
       </header>
     </>
   );
